@@ -23,21 +23,15 @@ public partial class PepeWorksContext : DbContext
 
     public virtual DbSet<SchemaVersion> SchemaVersions { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=MOE\\SQL2022; Database=PepeWorks; Trusted_connection=True; TrustServerCertificate=True");
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Camp>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Camp__3214EC0741E14F16");
-
             entity
                 .ToTable("Camp")
                 .ToTable(tb => tb.IsTemporal(ttb =>
                     {
-                        ttb.UseHistoryTable("MSSQL_TemporalHistoryFor_981578535", "dbo");
+                        ttb.UseHistoryTable("CampHistory", "dbo");
                         ttb
                             .HasPeriodStart("SysStartTime")
                             .HasColumnName("SysStartTime");
@@ -46,7 +40,7 @@ public partial class PepeWorksContext : DbContext
                             .HasColumnName("SysEndTime");
                     }));
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
             entity.Property(e => e.Code).HasMaxLength(10);
             entity.Property(e => e.CreatedAt).HasColumnType("datetime");
             entity.Property(e => e.CreatedBy).HasMaxLength(50);
@@ -57,18 +51,16 @@ public partial class PepeWorksContext : DbContext
             entity.HasOne(d => d.Location).WithMany(p => p.Camps)
                 .HasForeignKey(d => d.LocationId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Camp__LocationId__3C69FB99");
+                .HasConstraintName("FK_Camp_Location");
         });
 
         modelBuilder.Entity<Location>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Location__3214EC070A533ECC");
-
             entity
                 .ToTable("Location")
                 .ToTable(tb => tb.IsTemporal(ttb =>
                     {
-                        ttb.UseHistoryTable("MSSQL_TemporalHistoryFor_933578364", "dbo");
+                        ttb.UseHistoryTable("LocationHistory", "dbo");
                         ttb
                             .HasPeriodStart("SysStartTime")
                             .HasColumnName("SysStartTime");
@@ -77,7 +69,7 @@ public partial class PepeWorksContext : DbContext
                             .HasColumnName("SysEndTime");
                     }));
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
             entity.Property(e => e.Code).HasMaxLength(10);
             entity.Property(e => e.CreatedAt).HasColumnType("datetime");
             entity.Property(e => e.CreatedBy).HasMaxLength(50);
@@ -88,13 +80,11 @@ public partial class PepeWorksContext : DbContext
 
         modelBuilder.Entity<Room>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Room__3214EC07038F8E09");
-
             entity
                 .ToTable("Room")
                 .ToTable(tb => tb.IsTemporal(ttb =>
                     {
-                        ttb.UseHistoryTable("MSSQL_TemporalHistoryFor_1045578763", "dbo");
+                        ttb.UseHistoryTable("RoomHistory", "dbo");
                         ttb
                             .HasPeriodStart("SysStartTime")
                             .HasColumnName("SysStartTime");
@@ -103,7 +93,7 @@ public partial class PepeWorksContext : DbContext
                             .HasColumnName("SysEndTime");
                     }));
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
             entity.Property(e => e.Code).HasMaxLength(10);
             entity.Property(e => e.CreatedAt).HasColumnType("datetime");
             entity.Property(e => e.CreatedBy).HasMaxLength(50);
@@ -113,7 +103,7 @@ public partial class PepeWorksContext : DbContext
             entity.HasOne(d => d.Camp).WithMany(p => p.Rooms)
                 .HasForeignKey(d => d.CampId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Room__CampId__403A8C7D");
+                .HasConstraintName("FK_Room_Camp");
         });
 
         modelBuilder.Entity<SchemaVersion>(entity =>
