@@ -8,12 +8,12 @@ SET CHANGE_TRACKING = ON
 CREATE TABLE Location
 (
     Id           UNIQUEIDENTIFIER PRIMARY KEY,
-    Code         NVARCHAR(10),
-    Name         NVARCHAR(50),
-    CreatedAt    DATETIME,
-    CreatedBy    NVARCHAR(50),
-    UpdatedAt    DATETIME,
-    UpdatedBy    NVARCHAR(50),
+    Code         NVARCHAR(10) NOT NULL,
+    Name         NVARCHAR(50) NOT NULL,
+    CreatedAt    DATETIME NOT NULL,
+    CreatedBy    NVARCHAR(50) NOT NULL,
+    UpdatedAt    DATETIME NOT NULL,
+    UpdatedBy    NVARCHAR(50) NOT NULL,
     SysStartTime DATETIME2 GENERATED ALWAYS AS ROW START HIDDEN,
     SysEndTime   DATETIME2 GENERATED ALWAYS AS ROW END HIDDEN,
     PERIOD FOR SYSTEM_TIME (SysStartTime, SysEndTime)
@@ -24,13 +24,13 @@ CREATE TABLE Location
 CREATE TABLE Camp
 (
     Id           UNIQUEIDENTIFIER PRIMARY KEY,
-    Code         NVARCHAR(10),
-    Name         NVARCHAR(50),
-    LocationId   UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Location(Id),
-    CreatedAt    DATETIME,
-    CreatedBy    NVARCHAR(50),
-    UpdatedAt    DATETIME,
-    UpdatedBy    NVARCHAR(50),
+    Code         NVARCHAR(10) NOT NULL,
+    Name         NVARCHAR(50) NOT NULL,
+    LocationId   UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Location(Id) NOT NULL,
+    CreatedAt    DATETIME NOT NULL,
+    CreatedBy    NVARCHAR(50) NOT NULL,
+    UpdatedAt    DATETIME NOT NULL,
+    UpdatedBy    NVARCHAR(50) NOT NULL,
     SysStartTime DATETIME2 GENERATED ALWAYS AS ROW START HIDDEN,
     SysEndTime   DATETIME2 GENERATED ALWAYS AS ROW END HIDDEN,
     PERIOD FOR SYSTEM_TIME (SysStartTime, SysEndTime)
@@ -41,13 +41,13 @@ CREATE TABLE Camp
 CREATE TABLE Room
 (
     Id           UNIQUEIDENTIFIER PRIMARY KEY,
-    Code         NVARCHAR(10),
-    CampId       UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Camp(Id),
-    Capacity     SMALLINT,
-    CreatedAt    DATETIME,
-    CreatedBy    NVARCHAR(50),
-    UpdatedAt    DATETIME,
-    UpdatedBy    NVARCHAR(50),
+    Code         NVARCHAR(10) NOT NULL,
+    CampId       UNIQUEIDENTIFIER FOREIGN KEY REFERENCES Camp(Id) NOT NULL,
+    Capacity     SMALLINT NOT NULL,
+    CreatedAt    DATETIME NOT NULL,
+    CreatedBy    NVARCHAR(50) NOT NULL,
+    UpdatedAt    DATETIME NOT NULL,
+    UpdatedBy    NVARCHAR(50) NOT NULL,
     SysStartTime DATETIME2 GENERATED ALWAYS AS ROW START HIDDEN,
     SysEndTime   DATETIME2 GENERATED ALWAYS AS ROW END HIDDEN,
     PERIOD FOR SYSTEM_TIME (SysStartTime, SysEndTime)
