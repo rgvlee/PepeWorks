@@ -1,8 +1,6 @@
 using API.Data;
-using API.Features.Locations;
-using MediatR;
+using API.Extensions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<PepeWorksContext>((serviceProvider, optionsBuilder) =>
@@ -13,7 +11,10 @@ builder.Services.AddDbContext<PepeWorksContext>((serviceProvider, optionsBuilder
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(o =>
+{
+    // o.CustomSchemaIds(type => type.ToString());
+});
 
 var app = builder.Build();
 app.UseSwagger();
@@ -22,15 +23,5 @@ app.UseSwaggerUI(options =>
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
     options.RoutePrefix = string.Empty;
 });
-app.MapPost("/locations", async (IMediator mediator, AddLocation.AddLocationCommand command) =>
-    {
-        var location = await mediator.Send(command);
-        return Results.Created($"/locations/{location.Id}", location);
-    })
-    .WithOpenApi(operation => new OpenApiOperation(operation)
-    {
-        Description = "Adds a new location."
-    })
-    .WithTags("Locations")
-    .Produces<AddLocation.Location>();
+app.AddLocationRoutes();
 app.Run();
