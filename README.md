@@ -1,6 +1,6 @@
 # PepeWorks
 
-This repo serves is a hands on training exercise developing a workforce mobilisation aligned minimal API.
+This repo is the result of a hands on training exercise to develop a workforce mobilisation aligned minimal API.
 
 ## Database
 
