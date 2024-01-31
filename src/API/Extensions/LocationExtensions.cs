@@ -9,7 +9,7 @@ public static class LocationExtensions
 {
     public static WebApplication AddLocationRoutes(this WebApplication webApplication)
     {
-        webApplication.MapGet("/locations", async (IMediator mediator) =>
+        webApplication.MapGet("/locations", async (ISender mediator) =>
             {
                 var locations = await mediator.Send(new GetAllLocations.GetAllLocationsQuery());
                 return Results.Ok(locations);
@@ -21,7 +21,7 @@ public static class LocationExtensions
             .WithTags("Locations")
             .Produces<IEnumerable<Location>>();
 
-        webApplication.MapGet("/locations/{id}", async (IMediator mediator, Guid id) =>
+        webApplication.MapGet("/locations/{id}", async (ISender mediator, Guid id) =>
             {
                 var location = await mediator.Send(new GetLocationById.GetLocationByIdQuery { Id = id });
                 return location is not null ? Results.Ok(location) : Results.NotFound();
@@ -33,7 +33,7 @@ public static class LocationExtensions
             .WithTags("Locations")
             .Produces<Location>();
 
-        webApplication.MapPost("/locations", async (IMediator mediator, AddLocation.AddLocationCommand command) =>
+        webApplication.MapPost("/locations", async (ISender mediator, AddLocation.AddLocationCommand command) =>
             {
                 var location = await mediator.Send(command);
                 return Results.Created($"/locations/{location.Id}", location);
@@ -45,7 +45,7 @@ public static class LocationExtensions
             .WithTags("Locations")
             .Produces<Location>();
 
-        webApplication.MapDelete("/locations/{id}", async (IMediator mediator, Guid id) =>
+        webApplication.MapDelete("/locations/{id}", async (ISender mediator, Guid id) =>
             {
                 await mediator.Send(new DeleteLocationById.DeleteLocationByIdCommand { Id = id });
                 return Results.NoContent();
