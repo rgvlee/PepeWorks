@@ -26,6 +26,7 @@ Specify a connection string for the PepeWorks database.
 - EF Core 7 over SQL Server
 - Temporal tables
 - Working Get, Create, and Delete endpoints for the Location entity
+- Add Location validation via FluentValidation/MediatR pipeline behaviour
 
 ## TODO
 
@@ -45,9 +46,9 @@ Specify a connection string for the PepeWorks database.
 - Reduce duplication via generic implementations?
 - Guard clauses?
 - Consider containerisation
-- Add validation
+- Complete validation
     - This should also surface in the API documentation e.g., required properties, string max length
-- OData
+- OData (or similar)
   - Point in time support?
 - Publish events?
 
