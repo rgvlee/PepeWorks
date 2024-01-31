@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FluentResults;
+using FluentValidation;
 using MediatR;
 
 namespace API.Features.Locations;
@@ -20,6 +21,15 @@ public class AddLocation
         ///     The location name.
         /// </summary>
         public string Name { get; set; } = null!;
+    }
+
+    public class Validator : AbstractValidator<AddLocationCommand>
+    {
+        public Validator()
+        {
+            RuleFor(x => x.Code).NotEmpty().MaximumLength(10);
+            RuleFor(x => x.Name).NotEmpty().MaximumLength(50);
+        }
     }
 
     public class Handler : IRequestHandler<AddLocationCommand, Result<Domain.Location>>
