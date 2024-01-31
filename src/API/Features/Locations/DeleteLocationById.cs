@@ -28,8 +28,11 @@ public class DeleteLocationById
 
         public async Task Handle(DeleteLocationByIdCommand request, CancellationToken cancellationToken)
         {
-            var location = await _pepeWorksDbContext.Locations.SingleAsync(x => x.Id.Equals(request.Id), cancellationToken: cancellationToken);
+            var location = await _pepeWorksDbContext.Locations.SingleOrDefaultAsync(x => x.Id.Equals(request.Id), cancellationToken);
+            if (location is null) return;
+
             _pepeWorksDbContext.Locations.Remove(location);
+            await _pepeWorksDbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }
