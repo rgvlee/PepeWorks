@@ -1,4 +1,5 @@
-﻿using API.Domain;
+﻿using System.Text.Json;
+using API.Domain;
 using API.Features.Locations;
 using MediatR;
 using Microsoft.OpenApi.Models;
@@ -35,8 +36,8 @@ public static class LocationExtensions
 
         webApplication.MapPost("/locations", async (ISender mediator, AddLocation.AddLocationCommand command) =>
             {
-                var location = await mediator.Send(command);
-                return Results.Created($"/locations/{location.Id}", location);
+                var result = await mediator.Send(command);
+                return result.IsSuccess ? Results.Created($"/locations/{result.Value.Id}", result.Value) : Results.BadRequest(JsonSerializer.Serialize(result.Errors));
             })
             .WithOpenApi(operation => new OpenApiOperation(operation)
             {
