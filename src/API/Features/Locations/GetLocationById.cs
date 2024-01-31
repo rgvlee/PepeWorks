@@ -30,7 +30,7 @@ public class GetLocationById
 
         public async Task<Domain.Location?> Handle(GetLocationByIdQuery request, CancellationToken cancellationToken)
         {
-            var location = await _pepeWorksDbContext.Locations.AsNoTracking().SingleOrDefaultAsync(x => x.Id.Equals(request.Id), cancellationToken: cancellationToken);
+            var location = await _pepeWorksDbContext.Locations.AsNoTracking().SingleOrDefaultAsync(x => x.Id.Equals(request.Id), cancellationToken);
             return location is not null ? _mapper.Map<Data.Location, Domain.Location>(location) : null;
         }
     }

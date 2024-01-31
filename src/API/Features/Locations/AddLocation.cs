@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using FluentResults;
+using FluentValidation;
 using MediatR;
 
 namespace API.Features.Locations;
@@ -8,7 +10,7 @@ public class AddLocation
     /// <summary>
     ///     Adds a location.
     /// </summary>
-    public class AddLocationCommand : IRequest<Domain.Location>
+    public class AddLocationCommand : IRequest<Result<Domain.Location>>
     {
         /// <summary>
         ///     The location code.
@@ -21,7 +23,16 @@ public class AddLocation
         public string Name { get; set; } = null!;
     }
 
-    public class Handler : IRequestHandler<AddLocationCommand, Domain.Location>
+    public class Validator : AbstractValidator<AddLocationCommand>
+    {
+        public Validator()
+        {
+            RuleFor(x => x.Code).NotEmpty().MaximumLength(10);
+            RuleFor(x => x.Name).NotEmpty().MaximumLength(50);
+        }
+    }
+
+    public class Handler : IRequestHandler<AddLocationCommand, Result<Domain.Location>>
     {
         private readonly IMapper _mapper;
         private readonly Data.PepeWorksContext _pepeWorksDbContext;
@@ -32,7 +43,7 @@ public class AddLocation
             _mapper = mapper;
         }
 
-        public async Task<Domain.Location> Handle(AddLocationCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Domain.Location>> Handle(AddLocationCommand request, CancellationToken cancellationToken)
         {
             var location = _mapper.Map<AddLocationCommand, Data.Location>(request);
 
@@ -47,7 +58,7 @@ public class AddLocation
             //TODO automatically add an audit entry
             await _pepeWorksDbContext.SaveChangesAsync(cancellationToken);
 
-            return _mapper.Map<Data.Location, Domain.Location>(location);
+            return Result.Ok(_mapper.Map<Data.Location, Domain.Location>(location));
         }
     }
 }

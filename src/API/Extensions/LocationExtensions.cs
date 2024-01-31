@@ -1,4 +1,6 @@
-﻿using API.Domain;
+﻿using System.Net;
+using System.Text.Json;
+using API.Domain;
 using API.Features.Locations;
 using MediatR;
 using Microsoft.OpenApi.Models;
@@ -31,19 +33,22 @@ public static class LocationExtensions
                 Description = "Gets an existing location."
             })
             .WithTags("Locations")
-            .Produces<Location>();
+            .Produces<Location>()
+            .Produces((int)HttpStatusCode.NotFound);
 
         webApplication.MapPost("/locations", async (ISender mediator, AddLocation.AddLocationCommand command) =>
             {
-                var location = await mediator.Send(command);
-                return Results.Created($"/locations/{location.Id}", location);
+                var result = await mediator.Send(command);
+                return result.IsSuccess
+                    ? Results.Created($"/locations/{result.Value.Id}", result.Value)
+                    : Results.BadRequest(JsonSerializer.Serialize(result.Errors.Select(x => x.Message)));
             })
             .WithOpenApi(operation => new OpenApiOperation(operation)
             {
                 Description = "Adds a new location."
             })
             .WithTags("Locations")
-            .Produces<Location>();
+            .Produces<Location>((int)HttpStatusCode.Created);
 
         webApplication.MapDelete("/locations/{id}", async (ISender mediator, Guid id) =>
             {
@@ -54,7 +59,8 @@ public static class LocationExtensions
             {
                 Description = "Deletes an existing location."
             })
-            .WithTags("Locations");
+            .WithTags("Locations")
+            .Produces((int)HttpStatusCode.NoContent);
 
         return webApplication;
     }
