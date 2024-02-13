@@ -19,19 +19,19 @@ Specify a connection string for the PepeWorks database.
 
 ## Implementation features
 
-- .NET 7 Minimal API
+- .NET 8 Minimal API
 - Vertical slice architecture
 - CQRS via MediatR
 - API documentation via code/Swagger
-- EF Core 7 over SQL Server
+- EF Core 8 over SQL Server
 - Temporal tables
 - Working Get, Create, and Delete endpoints for the Location entity
 - Add Location validation via FluentValidation/MediatR pipeline behaviour
 
 ## TODO
 
-- Upgrade to .NET 8
-- Upgrade to EF Core 8
+- ~~Upgrade to .NET 8~~
+- ~~Upgrade to EF Core 8~~
 - Add integration tests using Alba
     - Consider containerisation for integration tests against a real SQL Server database
 - Add an API client
