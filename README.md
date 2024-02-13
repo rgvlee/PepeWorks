@@ -27,6 +27,7 @@ Specify a connection string for the PepeWorks database.
 - Temporal tables
 - Working Get, Create, and Delete endpoints for the Location entity
 - Add Location validation via FluentValidation/MediatR pipeline behaviour
+- Pipeline as code via NUKE
 
 ## TODO
 
@@ -39,7 +40,7 @@ Specify a connection string for the PepeWorks database.
 - Add bulk actions (e.g., bulk create, bulk delete)
 - Add partial updates (e.g., reallocate a room)
 - Add automatic auditing (likely via EF Core interceptors)
-- Add CI/CD
+- ~~Add CI/CD~~
 - Consider a cloud native deployment, including IaC (likely via NUKE/GitHub Actions/Azure)
     - Consider changing the DB to something cheaper than SQL Server (e.g., Cosmos DB)
 - Caching? Performance optimisation? Benchmarking to observe improvements overtime?
@@ -57,3 +58,4 @@ Specify a connection string for the PepeWorks database.
 - I used ChatGPT 3.5 to generate the initial database script
 - DbUp: https://dbup.readthedocs.io/en/latest/usage/
 - Vertical slice architecture example: https://code-maze.com/vertical-slice-architecture-aspnet-core/
+- NUKE: https://nuke.build/docs/introduction/#fast-track
