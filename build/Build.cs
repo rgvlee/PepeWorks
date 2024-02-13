@@ -30,7 +30,7 @@ class Build : NukeBuild
         });
 
     Target Compile => _ => _
-        .DependsOn(Restore)
+        .DependsOn(Clean, Restore)
         .Executes(() =>
         {
             DotNetBuild(s => s
