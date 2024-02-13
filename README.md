@@ -57,3 +57,4 @@ Specify a connection string for the PepeWorks database.
 - I used ChatGPT 3.5 to generate the initial database script
 - DbUp: https://dbup.readthedocs.io/en/latest/usage/
 - Vertical slice architecture example: https://code-maze.com/vertical-slice-architecture-aspnet-core/
+- NUKE: https://nuke.build/docs/introduction/#fast-track
