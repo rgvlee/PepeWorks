@@ -41,7 +41,13 @@ class Build : NukeBuild
 
     Target Test => _ => _
         .DependsOn(Compile)
-        .Executes(() => { });
+        .Executes(() =>
+        {
+            DotNetTest(s => s
+                .SetProjectFile(Solution)
+                .SetConfiguration(Configuration)
+                .EnableNoRestore());
+        });
 
     public static int Main() => Execute<Build>(x => x.Compile);
 }
